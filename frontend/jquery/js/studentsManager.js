@@ -1,8 +1,6 @@
 $(document).ready(function(){
-    const urlSearch = new URLSearchParams(window.location.search);
-    const ra = urlSearch.get('ra');
-    if(ra){
-        fetchStudent(ra);
+    if(isEditingMode()){
+        fetchStudent();
     }else{
         $('.content-page').show()
         $('.loader').hide()
@@ -16,23 +14,35 @@ $(document).ready(function(){
             cpf:$(this).find('#cpf').val(),
             email:event.target.email.value,
         };
-        fetch('http://localhost:3000/students/save', {
-            method: 'POST',
-            body: JSON.stringify(body),
-            headers: {
-                Accept: 'application/json',
-                'Content-type': 'application/json',
-            } 
-        }).then((response)=>{
-            return response.json();
-        }).then((data)=>{
-            alert(data.message),
-            document.location.href = 'studentsList.html';
+
+        let methodEndPoint;
+        let urlEndPoint;
+        if(isEditingMode()){
+            methodEndPoint = 'PUT';
+            urlEndPoint = `http://localhost:3000/students/edit/${getRaFromURL()}`;
+        }else{
+            methodEndPoint = 'POST';
+            urlEndPoint = 'http://localhost:3000/students/save';
+        }
+console.log(urlEndPoint, methodEndPoint)
+            fetch(urlEndPoint, {
+                method: methodEndPoint,
+                body: JSON.stringify(body),
+                headers: {
+                    Accept: 'application/json',
+                    'Content-type': 'application/json',
+                } 
+            }).then((response)=>{
+                return response.json();
+            }).then((data)=>{
+                alert(data.message),
+                document.location.href = 'studentsList.html';
+            })
         })
-    })
+
 })
-function fetchStudent(ra){
-        fetch(`http://localhost:3000/students/find/${ra}`).then(function(response){
+function fetchStudent(){
+        fetch(`http://localhost:3000/students/find/${getRaFromURL()}`).then(function(response){
             return response.json();
         }).then(function(data){
             const studentForm = $('#studentForm');
@@ -45,3 +55,12 @@ function fetchStudent(ra){
             $('.loader').hide('fast')
         })
     }
+
+function isEditingMode(){
+    const urlSearch = new URLSearchParams(window.location.search);
+    return urlSearch.has('ra');
+}
+function getRaFromURL(){
+    const urlSearch = new URLSearchParams(window.location.search);
+    return urlSearch.get('ra');
+}

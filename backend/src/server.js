@@ -30,10 +30,26 @@ app.get('/students/list', (req, res) => {
       nome: req.body.name,
       ra:req.body.ra,
       cpf:req.body.cpf,
-      email:req.body.cpf,
+      email:req.body.email,
     });
     res.send({result:true,message:'Deu bom'})
   })
+
+  app.put('/students/edit/:ra', (req, res)=>{
+    database = database.filter((student)=>{
+      return student.ra != req.params.ra
+    });
+    database.push({
+      nome: req.body.name,
+      ra:req.body.ra,
+      cpf:req.body.cpf,
+      email:req.body.email,
+    });
+    res.send({
+      result: true,
+      message: 'O estudante foi editado'
+    })
+  });
 
   app.delete('/students/delete/:ra', (req, res) =>{
     database = database.filter((student) =>{
