@@ -1,5 +1,6 @@
 $(document).ready(function(){
-    if(isEditingMode()){
+    if(isEditindMode()){
+        setReadOnlyFields();
         fetchStudent();
     }else{
         $('.content-page').show()
@@ -17,30 +18,38 @@ $(document).ready(function(){
 
         let methodEndPoint;
         let urlEndPoint;
-        if(isEditingMode()){
+        if(isEditindMode()){
             methodEndPoint = 'PUT';
-            urlEndPoint = `http://localhost:3000/students/edit/${getRaFromURL()}`;
+            urlEndPoint = `http://localhost:3000/students/edit/${getRaFromURL()}`
         }else{
             methodEndPoint = 'POST';
-            urlEndPoint = 'http://localhost:3000/students/save';
+            urlEndPoint = 'http://localhost:3000/students/save'
         }
 console.log(urlEndPoint, methodEndPoint)
-            fetch(urlEndPoint, {
-                method: methodEndPoint,
-                body: JSON.stringify(body),
-                headers: {
-                    Accept: 'application/json',
-                    'Content-type': 'application/json',
-                } 
-            }).then((response)=>{
-                return response.json();
-            }).then((data)=>{
-                alert(data.message),
-                document.location.href = 'studentsList.html';
-            })
+        fetch(urlEndPoint, {
+            method: methodEndPoint,
+            body: JSON.stringify(body),
+            headers: {
+                Accept: 'application/json',
+                'Content-type': 'application/json',
+            } 
+        }).then((response)=>{
+            return response.json();
+        }).then((data)=>{
+            alert(data.message),
+            document.location.href = 'studentsList.html';
         })
-
+    })
 })
+
+
+
+function setReadOnlyFields(){
+    const studentForm = $('#studentForm')
+    studentForm.find('#ra').attr('readonly', true);
+    studentForm.find('#cpf').attr('readonly', true);
+}
+
 function fetchStudent(){
         fetch(`http://localhost:3000/students/find/${getRaFromURL()}`).then(function(response){
             return response.json();
@@ -55,12 +64,11 @@ function fetchStudent(){
             $('.loader').hide('fast')
         })
     }
-
-function isEditingMode(){
-    const urlSearch = new URLSearchParams(window.location.search);
-    return urlSearch.has('ra');
-}
-function getRaFromURL(){
-    const urlSearch = new URLSearchParams(window.location.search);
-    return urlSearch.get('ra');
-}
+    function isEditindMode(){
+        const urlSearch = new URLSearchParams(window.location.search);
+        return urlSearch.has('ra');
+    }
+    function getRaFromURL(){
+        const urlSearch = new URLSearchParams(window.location.search);
+        return urlSearch.get('ra');
+    }
