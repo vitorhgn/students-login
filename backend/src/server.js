@@ -1,7 +1,10 @@
-const express = require('express')
+const express = require('express');
+const knex = require('knex');
 var cors = require("cors");
-let database = require('./database')
+let database = require('./database');
+const knexConfigFile = require('../knexfile');
 const app = express()
+app.database = knex(knexConfigFile.test);
 app.use(cors())
 app.use(express.json())
 app.get('/', (req, res)  =>{
@@ -19,19 +22,21 @@ app.get('/students/list/:searchQuery?', (req, res) => {
       student.cpf.indexOf(search) != -1;
     })
   }
-  setTimeout(function(){
-    res.send(result);
-  },2000)
+  return app.database('students')
+  .select()
+  .then((data)=>{
+    res.send(data);
+  })
 });
 
   app.get('/students/find/:ra', (req, res) => {
-    const studentFound = database.find(function(student){
-      return student.ra == req.params.ra
-    });
-    setTimeout(function(){
-      res.send(studentFound);
-
-    },2000)
+    return app.database('students')
+    .select()
+    .where({ra : req.params.ra})
+    .first()
+    .then((response)=>{
+      res.send(response);
+    })
   });
 
   app.post('/students/save', (req, res)=>{
@@ -44,21 +49,42 @@ app.get('/students/list/:searchQuery?', (req, res) => {
     res.send({result:true,message:'Deu bom'})
   })
 
-  app.put('/students/edit/:ra', (req, res)=>{
-    database = database.filter((student)=>{
-      return student.ra != req.params.ra
-    });
-    database.push({
-      nome: req.body.name,
-      ra:req.body.ra,
-      cpf:req.body.cpf,
-      email:req.body.email,
-    });
-    res.send({
-      result: true,
-      message: 'O estudante foi editado'
-    })
-  });
+  app.put('/students/edit/:ra', async(req, res)=>{
+    const userFound = await app
+    .database('students')
+    .select()
+    .where({ra: req.params.ra})
+    .first();
+
+    if(!userFound){
+      res
+      .status(400)
+      .send({
+        result: false,
+        message: 'O estudante informado não existe'
+      });
+    }    
+      const studentUpdate = await app
+      .database('students')
+      .update({
+          email: req.body.email,
+          nome: req.body.name
+      })
+      .where({
+        ra: req.params.ra
+      });
+      if(studentUpdate){
+        res.send({
+          result: true,
+          message: 'O estudante foi editado'
+        })
+      }else{
+        res.status(500).send({
+          result: false,
+          message: 'Desculpa, mas não foi possível atualizar o estudante.'
+        })
+      }
+  })
 
   app.delete('/students/delete/:ra', (req, res) =>{
     database = database.filter((student) =>{
@@ -67,7 +93,7 @@ app.get('/students/list/:searchQuery?', (req, res) => {
     res.send({
       result: true,
       message: `O usuário ${req.params.ra} foi excluído`})
-  });
+});
 
 app.listen(3000)
 console.log("Server is running...");

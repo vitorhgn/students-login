@@ -36,7 +36,7 @@ console.log(urlEndPoint, methodEndPoint)
         }).then((response)=>{
             return response.json();
         }).then((data)=>{
-            alert(data.message),
+            alert(data.message);
             document.location.href = 'studentsList.html';
         })
     })
