@@ -3,6 +3,7 @@ const knex = require('knex');
 var cors = require("cors");
 let database = require('./database');
 const knexConfigFile = require('../knexfile');
+const { response } = require('express');
 const app = express()
 app.database = knex(knexConfigFile.test);
 app.use(cors())
@@ -12,17 +13,17 @@ app.get('/', (req, res)  =>{
 })
 
 app.get('/students/list/:searchQuery?', (req, res) => {
+
+  let query = app.database("students");
+
   let result = database;
   let search = req.params.searchQuery;
   if(search){
-    search = search.toLowerCase();
-    result = result.filter((student)=>{
-      return student.ra.indexOf(search) != -1 ||
-      student.nome.toLowerCase().indexOf(search) != -1 ||
-      student.cpf.indexOf(search) != -1;
-    })
+    query.where("ra", search)
+    .orWhere("nome", "like" , `%${search}%`)
+    .orWhere("cpf", search);
   }
-  return app.database('students')
+  return query
   .select()
   .then((data)=>{
     res.send(data);
@@ -39,17 +40,89 @@ app.get('/students/list/:searchQuery?', (req, res) => {
     })
   });
 
-  app.post('/students/save', (req, res)=>{
-    database.push({
+  app.post('/students/save', async (req, res)=>{
+
+    if (req.body.name == ''){
+      return res.status(400).send({
+        result: false,
+        message: `Preencha todos os campos antes de salvar!`
+      })
+    }
+    if (req.body.email == ''){
+      return res.status(400).send({
+        result: false,
+        message: `Preencha todos os campos antes de salvar!`
+      })
+    }
+    if (req.body.ra == ''){
+      return res.status(400).send({
+        result: false,
+        message: `Preencha todos os campos antes de salvar!`
+      })
+    }
+    if (req.body.cpf == ''){
+      return res.status(400).send({
+        result: false,
+        message: `Preencha todos os campos antes de salvar!`
+      })
+    }
+    if(parseInt(req.body.ra)!= req.body.ra){
+      return res.status(400).send({
+        result: false,
+        message: `O RA deve ser números inteiros`
+      })
+    }
+    if(parseInt(req.body.cpf)!= req.body.cpf){
+      return res.status(400).send({
+        result: false,
+        message: `O CPF deve ser números inteiros`
+      })
+    }
+
+    const userExists = await app.database("students")
+    .select()
+    .where({
+      ra: req.body.ra
+    })
+    .first();
+    if(userExists){
+      return res.status(400).send({
+        result:false,
+        message:`Já existe um usuário com o RA: ${req.body.ra}`
+      })
+    }
+
+    return app.database("students")
+    .insert({
       nome: req.body.name,
       ra:req.body.ra,
       cpf:req.body.cpf,
-      email:req.body.email,
-    });
-    res.send({result:true,message:'Deu bom'})
+      email:req.body.email
+    })
+    .then((response)=>{
+      if(response){
+        res.send({result:true,message:'Estudante cadastrado com sucesso'})
+      }else{
+        res.status(500).send({result:false,message:'Falha no cadastro do aluno'})
+      }
+    })
   })
 
   app.put('/students/edit/:ra', async(req, res)=>{
+
+    if (req.body.name == ''){
+      return res.status(400).send({
+        result: false,
+        message: `Preencha todos os campos antes de salvar!`
+      })
+    }
+    if (req.body.email == ''){
+      return res.status(400).send({
+        result: false,
+        message: `Preencha todos os campos antes de salvar!`
+      })
+    }
+
     const userFound = await app
     .database('students')
     .select()
@@ -87,12 +160,20 @@ app.get('/students/list/:searchQuery?', (req, res) => {
   })
 
   app.delete('/students/delete/:ra', (req, res) =>{
-    database = database.filter((student) =>{
-      return student.ra != req.params.ra;
+    return app.database('students')
+    .where({ra: req.params.ra})
+    .del()
+    .then((response)=>{
+      if(response){
+      res.send({
+        result: true,
+        message: `O usuário ${req.params.ra} foi excluído`})
+      }else{
+        res.send({
+          result: false,
+          message: `O usuário ${req.params.ra} não foi excluído`})
+      }
     })
-    res.send({
-      result: true,
-      message: `O usuário ${req.params.ra} foi excluído`})
 });
 
 app.listen(3000)
