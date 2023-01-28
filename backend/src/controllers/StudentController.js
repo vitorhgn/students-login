@@ -29,57 +29,53 @@ module.exports = class StudentsController{
         })
     };
 
-    createAction = async (req, res) =>{
-        if (req.body.name == ''){
-            return res.status(400).send({
-              result: false,
-              message: `Preencha todos os campos antes de salvar!`
-            })
+    isCreateDataValid = async (data)=>{     
+        if (data.name == ''){
+            return 'Preencha todos os campos antes de salvar!';
           }
-          if (req.body.email == ''){
-            return res.status(400).send({
-              result: false,
-              message: `Preencha todos os campos antes de salvar!`
-            })
+          if (data.email == ''){
+            return `Preencha todos os campos antes de salvar!`;
           }
-          if (req.body.ra == ''){
-            return res.status(400).send({
-              result: false,
-              message: `Preencha todos os campos antes de salvar!`
-            })
+          if (data.ra == ''){
+            return `Preencha todos os campos antes de salvar!`;
           }
-          if (req.body.cpf == ''){
-            return res.status(400).send({
-              result: false,
-              message: `Preencha todos os campos antes de salvar!`
-            })
+          if (data.cpf == ''){
+            return `Preencha todos os campos antes de salvar!`;
           }
-          if(parseInt(req.body.ra)!= req.body.ra){
-            return res.status(400).send({
-              result: false,
-              message: `O RA deve ser números inteiros`
-            })
+          if(parseInt(data.ra)!= data.ra){
+            return `O RA deve ser números inteiros`;
           }
-          if(parseInt(req.body.cpf)!= req.body.cpf){
-            return res.status(400).send({
-              result: false,
-              message: `O CPF deve ser números inteiros`
-            })
+          if(parseInt(data.cpf)!= data.cpf){
+            return `O CPF deve ser números inteiros`;
           }
-      
           const userExists = await this.app.database("students")
           .select()
           .where({
-            ra: req.body.ra
+            ra: data.ra
           })
           .first();
           if(userExists){
-            return res.status(400).send({
-              result:false,
-              message:`Já existe um usuário com o RA: ${req.body.ra}`
-            })
+            return `Já existe um usuário com este RA: ${data.ra}`
           }
-      
+          return true;
+    };
+    isEditDataValid = (data)=>{
+        if (data.name == ''){
+            return `Preencha o nome antes antes de salvar!`
+          }
+          if (data.email == ''){
+            return `Preencha o email antes de salvar!`
+          }
+          return true;
+    }
+    createAction = async (req, res) =>{       
+        const isCreateDataValid = await this.isCreateDataValid(req.body);
+        if (isCreateDataValid != true){
+            return res.status(400).send({
+                result: false,
+                message: isCreateDataValid,
+            });
+        }  
           return this.app.database("students")
           .insert({
             nome: req.body.name,
@@ -97,18 +93,13 @@ module.exports = class StudentsController{
     };
 
     editAction = async(req, res)=>{
-        if (req.body.name == ''){
+        const isEditDataValid = this.isEditDataValid(req.body);
+        if (isEditDataValid != true){
             return res.status(400).send({
-              result: false,
-              message: `Preencha todos os campos antes de salvar!`
-            })
-          }
-          if (req.body.email == ''){
-            return res.status(400).send({
-              result: false,
-              message: `Preencha todos os campos antes de salvar!`
-            })
-          }
+                result: false,
+                message: isEditDataValid,
+            });
+        }  
       
           const userFound = await this.app
           .database('students')
