@@ -47,8 +47,8 @@ function fetchStudentsList(searchQuery = ''){
             </td>
             </tr>
             `)
+        })
             $('.loader').hide('fast');
             $('.content-page').show('fast');
-        })
     })
 }
