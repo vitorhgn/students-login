@@ -14,7 +14,7 @@ $(document).ready(function(){
 });
 
 const deleteStudent = (ra) =>{
-    fetch(`http://localhost:3000/students/delete/${ra}`, {
+    fetch(`http://localhost:3006/students/delete/${ra}`, {
         method: 'DELETE'
     }).then((response)=>{
         return response.json();
@@ -29,7 +29,7 @@ function fetchStudentsList(searchQuery = ''){
     $('.loader').show('fast');
     $('.content-page').hide();
     
-    fetch(`http://localhost:3000/students/list/${searchQuery}`).then((response) => {
+    fetch(`http://localhost:3006/students/list/${searchQuery}`).then((response) => {
         return response.json();
     }).then((data) =>{
         const table = $('#studentList tbody');
