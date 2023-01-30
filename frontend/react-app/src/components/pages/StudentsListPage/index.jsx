@@ -74,7 +74,7 @@ class StudentListPage extends React.Component{
                     }}/>
                     <button>Pesquisar</button>
                 </form>
-                <a className="btn btn-dark" href="studentsManager.html">Cadastrar Aluno</a>
+                <a className="btn btn-dark" href="/student-manager">Cadastrar Aluno</a>
             </div>
             <table id='studentList' className="table-list">
                 <thead>
@@ -94,7 +94,7 @@ class StudentListPage extends React.Component{
                     <td>{student.nome}</td>
                     <td>{student.cpf}</td>
                     <td>
-                    <a href={`studentsManager.html?ra=${student.ra}`}>Editar</a>
+                    <a href={`/student-manager?ra=${student.ra}`}>Editar</a>
                     <a className="removeStudent" onClick={()=>{this.onClickRemoveStudent(student.ra)}} href="/#">Excluir</a>
                     </td>
                     </tr>
