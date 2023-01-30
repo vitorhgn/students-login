@@ -62,6 +62,10 @@ class StudentListPage extends React.Component{
             return <div className="loader"></div>
         }
         return ( 
+            <>
+            <header class="main-header">
+            Lista de Alunos
+        </header>
             <div className="padding-left-right-20">
             <div className="top-actions">
                 <form onSubmit={this.onSubmitFormSearch} id="formSearchStudent" className="form-search" action="">
@@ -74,7 +78,7 @@ class StudentListPage extends React.Component{
                     }}/>
                     <button>Pesquisar</button>
                 </form>
-                <a className="btn btn-dark" href="/student-manager">Cadastrar Aluno</a>
+                <a className="btn btn-dark" href="/student/add">Cadastrar Aluno</a>
             </div>
             <table id='studentList' className="table-list">
                 <thead>
@@ -87,14 +91,14 @@ class StudentListPage extends React.Component{
                 </thead>
                 <tbody>
                 {
-                this.state.studentsList.map((student) =>{
-                    return(
-                    <tr key={student.ra}>
+                    this.state.studentsList.map((student) =>{
+                        return(
+                            <tr key={student.ra}>
                     <td>{student.ra}</td>
                     <td>{student.nome}</td>
                     <td>{student.cpf}</td>
                     <td>
-                    <a href={`/student-manager?ra=${student.ra}`}>Editar</a>
+                    <a href={`/student/edit/${student.ra}`}>Editar</a>
                     <a className="removeStudent" onClick={()=>{this.onClickRemoveStudent(student.ra)}} href="/#">Excluir</a>
                     </td>
                     </tr>
@@ -104,32 +108,8 @@ class StudentListPage extends React.Component{
                 </tbody>
             </table>
         </div>  
+        </>
         );
     }
 }
-// const StudentListPage = () =>{
-//     return ( 
-//         <div className="padding-left-right-20">
-//         <div className="top-actions">
-//             <form id="formSearchStudent" className="form-search" action="">
-//                 <input type="text" name="searchInput" id="searchInput"/>
-//                 <button>Pesquisar</button>
-//             </form>
-//             <a className="btn btn-dark" href="studentsManager.html">Cadastrar Aluno</a>
-//         </div>
-//         <table id='studentList' className="table-list">
-//             <thead>
-//                 <tr>
-//                     <th>Registro Acadêmico</th>
-//                     <th>Nome</th>
-//                     <th>CPF</th>
-//                     <th>Ações</th>
-//                 </tr>
-//             </thead>
-//             <tbody>
-//             </tbody>
-//         </table>
-//     </div>  
-//     );
-// };
 export default StudentListPage;

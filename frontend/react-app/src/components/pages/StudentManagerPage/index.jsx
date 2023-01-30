@@ -1,7 +1,11 @@
 import './style.css';
-const StudentsManagerPage = ()=>{
+const StudentManagerPage = ()=>{
     return (
-
+<>
+        <header class="main-header">
+            Cadastro de Aluno
+        </header>
+        <div class="loader"></div>
             <form id="studentForm" className="form" method="post">
                 <div className="form-group">
                     <label for="name">Nome</label>
@@ -24,7 +28,8 @@ const StudentsManagerPage = ()=>{
                     <button className="btn">Salvar</button>
                 </div>
             </form>
+</>
 
 );
 };
-export default StudentsManagerPage;
+export default StudentManagerPage;

@@ -1,6 +1,6 @@
 import './App.css';
 import StudentListPage from './components/pages/StudentsListPage';
-import StudentsManagerPage from './components/pages/StudentsManager';
+import StudentManagerPage from './components/pages/StudentManagerPage';
 import { BrowserRouter , Routes, Route } from 'react-router-dom'
 import Navbar from './components/shared/Navbar';
 function App() {
@@ -9,11 +9,11 @@ function App() {
     <div className="main-container">
 <Navbar />
       <section className="container">
-        <header className="main-header">Consulta de Alunos</header>
         <div className="content-page">
 <Routes>
   <Route path='/' element={<StudentListPage />} />
-  <Route path='/student-manager' element={<StudentsManagerPage/>} />
+  <Route path='/student/add' element={<StudentManagerPage/>} />
+  <Route path='/student/edit/:ra' element={<StudentManagerPage/>} />
 </Routes>
 
         </div>
