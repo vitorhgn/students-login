@@ -1,5 +1,7 @@
 import React from 'react';
 import './style.css';
+import Loader from '../../shared/Loader';
+
 class StudentListPage extends React.Component{
 
     constructor(props){
@@ -59,11 +61,11 @@ class StudentListPage extends React.Component{
 
     render(){
         if (this.state.isLoading){
-            return <div className="loader"></div>
+            return <Loader />
         }
         return ( 
             <>
-            <header class="main-header">
+            <header className="main-header">
             Lista de Alunos
         </header>
             <div className="padding-left-right-20">

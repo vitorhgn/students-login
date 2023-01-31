@@ -49,25 +49,6 @@
   font-weight: 600;
   font-size: 16px;
 }
-.loader {
-  border: 8px solid #f3f3f3;
-  border-top: 8px solid skyblue;
-  border-radius: 50%;
-  width: 60px;
-  height: 60px;
-  animation: loader 2s linear infinite;
-  margin: auto;
-  margin-top: 40px;
-  margin-bottom: 40px;
-}
-@keyframes loader {
-  0% {
-      transform: rotate(0deg);
-  }
-  100% {
-      transform: rotate(360deg);
-  }
-}
 .display-none{
   display: none;
 }
