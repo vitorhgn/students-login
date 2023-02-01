@@ -2,6 +2,7 @@ import './style.css';
 import { useState , useEffect} from 'react';
 import Loader from '../../shared/Loader';
 import {Navigate , Link , useParams} from 'react-router-dom';
+import Swal from 'sweetalert2' ;
 
 
 const StudentManagerPage = ()=>{
@@ -15,6 +16,8 @@ const StudentManagerPage = ()=>{
     const [email, updateEmail] = useState("");
     const [cpf, updateCpf] = useState("");
     const [ra, updateRa] = useState("");
+    const [raReadOnly, updateRaReadyOnly] = useState(false);
+    const [cpfReadOnly, updateCpfReadyOnly] = useState(false);
 
     
     
@@ -34,6 +37,8 @@ const StudentManagerPage = ()=>{
     useEffect(()=>{
         if(id){
             fetchStudent();
+            updateRaReadyOnly(true);
+            updateCpfReadyOnly(true);
         }
     }, []);
 
@@ -66,9 +71,19 @@ const StudentManagerPage = ()=>{
             }).then((response)=>{
                 return response.json();
             }).then((data)=>{
-                alert(data.message);
-                if(data.result === true){
+                if(data.result){
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Parabéns',
+                        text: data.message
+                    })
                     setIsRedirect(true );
+                }else{
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Desculpe ...',
+                        text: data.message
+                    })
                 }
             })
     }
@@ -99,13 +114,13 @@ const StudentManagerPage = ()=>{
                 </div>
                 <div className="form-group">
                     <label htmlFor="ra">RA</label>
-                    <input required type="number" name="ra" id="ra" placeholder='Digite um RA' value={ra} onChange={(event)=>{
+                    <input required type="number" name="ra" id="ra" placeholder='Digite um RA' readOnly={raReadOnly} value={ra} onChange={(event)=>{
                         updateRa(event.target.value);
                     }}/>
                 </div>
                 <div className="form-group">
                     <label htmlFor="cpf">CPF</label>
-                    <input required type="number" name="cpf" id="cpf" placeholder='Digite seu CPF' value={cpf} onChange={(event)=>{
+                    <input required type="number" name="cpf" id="cpf" placeholder='Digite seu CPF' readOnly={cpfReadOnly} value={cpf} onChange={(event)=>{
                         updateCpf(event.target.value);
                     }}/>
                 </div>

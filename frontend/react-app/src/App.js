@@ -1,7 +1,7 @@
 import './App.css';
 import StudentListPage from './components/pages/StudentsListPage';
 import StudentManagerPage from './components/pages/StudentManagerPage';
-import Error from './components/pages/Error';
+import Error from './components/shared/Error';
 import { BrowserRouter , Routes, Route } from 'react-router-dom'
 import Navbar from './components/shared/Navbar';
 function App() {

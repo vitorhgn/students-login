@@ -145,11 +145,11 @@ module.exports = class StudentsController{
           if(response){
           res.send({
             result: true,
-            message: `O usuário ${req.params.ra} foi excluído`})
+            message: `O usuário #${req.params.ra} foi excluído`})
           }else{
             res.send({
               result: false,
-              message: `O usuário ${req.params.ra} não foi excluído`})
+              message: `O usuário #${req.params.ra} não foi excluído`})
           }
         })
     };

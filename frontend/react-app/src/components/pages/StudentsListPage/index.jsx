@@ -2,6 +2,7 @@ import React from 'react';
 import './style.css';
 import Loader from '../../shared/Loader';
 import {Link} from 'react-router-dom';
+import Swal from 'sweetalert2' ;
 
 class StudentListPage extends React.Component{
 
@@ -21,10 +22,17 @@ class StudentListPage extends React.Component{
     }
 
     onClickRemoveStudent = (ra) =>{
-        const confirmation = window.confirm("Você realmente deseja excluír esse usuário?");
-        if(confirmation){
-            this.deleteStudent(ra);
-    }
+        Swal.fire({
+            title: 'Você realmente deseja excluír esse usuário?',
+            showCancelButton: false,
+            showDenyButton: true,
+            denyButtonText: 'Cancelar',
+            confirmButtonText: 'Excluír'
+        }).then((result) => {
+            if (result.isConfirmed) {
+              this.deleteStudent(ra);
+            }
+          });
     }
     deleteStudent = (ra) =>{
         this.setState({isLoading:true});
@@ -33,7 +41,11 @@ class StudentListPage extends React.Component{
         }).then((response)=>{
             return response.json();
         }).then((data)=>{
-            // alert(data.message)
+            Swal.fire({
+                icon: 'success',
+                title: 'Parabéns',
+                text: data.message
+            })
             this.fetchStudentsList()
         });
     }
@@ -54,7 +66,11 @@ class StudentListPage extends React.Component{
 
         })
         .catch((error)=>{
-            alert('Desculpe, mas não foi possível estabelecer conexão com o servidor.');
+            Swal.fire({
+                icon: 'error',
+                Title: 'Erro',
+                text: 'Desculpe, mas não foi possível estabelecer conexão com o servidor.'
+            })
             console.log(error);
         })
     }
