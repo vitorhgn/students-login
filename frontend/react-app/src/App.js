@@ -1,6 +1,7 @@
 import './App.css';
 import StudentListPage from './components/pages/StudentsListPage';
 import StudentManagerPage from './components/pages/StudentManagerPage';
+import Error from './components/pages/Error';
 import { BrowserRouter , Routes, Route } from 'react-router-dom'
 import Navbar from './components/shared/Navbar';
 function App() {
@@ -13,7 +14,8 @@ function App() {
 <Routes>
   <Route path='/' element={<StudentListPage />} />
   <Route path='/student/add' element={<StudentManagerPage/>} />
-  <Route path='/student/edit/:ra' element={<StudentManagerPage/>} />
+  <Route path='/student/edit/:id' element={<StudentManagerPage/>} />
+  <Route path='*' element={<Error />} />
 </Routes>
 
         </div>

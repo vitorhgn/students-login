@@ -1,25 +1,41 @@
 import './style.css';
-import { useState } from 'react';
+import { useState , useEffect} from 'react';
 import Loader from '../../shared/Loader';
-import {Navigate , Link} from 'react-router-dom';
+import {Navigate , Link , useParams} from 'react-router-dom';
 
 
 const StudentManagerPage = ()=>{
     
+    const {id} = useParams();
+
     const [isRedirect, setIsRedirect] = useState(false);
     const [isLoading, updateIsLoading] = useState(false);
 
-    const [name, updateName] = useState("")
-    const [email, updateEmail] = useState("")
-    const [cpf, updateCpf] = useState("")
-    const [ra, updateRa] = useState("")
+    const [name, updateName] = useState("");
+    const [email, updateEmail] = useState("");
+    const [cpf, updateCpf] = useState("");
+    const [ra, updateRa] = useState("");
 
-    const isEditindMode = () =>{
-        return false;
-    };
-    const getRaFromURL = () =>{
-        return 0;
+    
+    
+    const fetchStudent = ()=> {
+        updateIsLoading(true);
+        fetch(`http://localhost:3006/students/find/${id}`).then(function(response){
+            return response.json();
+        }).then(function(data){
+            updateName(data.nome);
+            updateEmail(data.email);
+            updateCpf(data.cpf);
+            updateRa(data.ra);
+            updateIsLoading(false);
+        })
     }
+
+    useEffect(()=>{
+        if(id){
+            fetchStudent();
+        }
+    }, []);
 
     const onSubmitForm = (event) => {
         event.preventDefault();
@@ -32,9 +48,9 @@ const StudentManagerPage = ()=>{
     
             let methodEndPoint;
             let urlEndPoint;
-            if(isEditindMode()){
+            if(id){
                 methodEndPoint = 'PUT';
-                urlEndPoint = `http://localhost:3006/students/edit/${getRaFromURL()}`
+                urlEndPoint = `http://localhost:3006/students/edit/${id}`
             }else{
                 methodEndPoint = 'POST';
                 urlEndPoint = 'http://localhost:3006/students/save'
