@@ -86,7 +86,7 @@ class StudentListPage extends React.Component{
             Lista de Alunos
         </header>
             <div className="padding-left-right-20">
-            <div className="top-actions">
+            <div className="card">
                 <form onSubmit={this.onSubmitFormSearch} id="formSearchStudent" className="form-search" action="">
                     <input type="text" name="searchInput" id="searchInput" value={this.state.formSearch.searchInput} onChange={(event)=>{
                     this.setState({
@@ -99,6 +99,7 @@ class StudentListPage extends React.Component{
                 </form>
                 <Link to="/student/add" className="btn btn-dark"> Cadastrar Aluno </Link>
             </div>
+            <div className='card'>
             <table id='studentList' className="table-list">
                 <thead>
                     <tr>
@@ -117,8 +118,8 @@ class StudentListPage extends React.Component{
                     <td>{student.nome}</td>
                     <td>{student.cpf}</td>
                     <td>
-                    <Link to={`/student/edit/${student.ra}`}>Editar</Link>
-                    <a className="removeStudent" onClick={()=>{this.onClickRemoveStudent(student.ra)}} href="/#">Excluir</a>
+                    <Link className='action-link' to={`/student/edit/${student.ra}`}>Editar</Link>
+                    <a className="removeStudent action-link" onClick={()=>{this.onClickRemoveStudent(student.ra)}} href="/#">Excluir</a>
                     </td>
                     </tr>
                 );
@@ -126,6 +127,7 @@ class StudentListPage extends React.Component{
         }
                 </tbody>
             </table>
+            </div>
         </div>  
         </>
         );

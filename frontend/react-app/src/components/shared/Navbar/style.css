@@ -1,5 +1,6 @@
 .main-nav {
-    background-color: #212529;
+    background-image: linear-gradient(to right, #141e30, #243b55);
+    box-shadow: 7px 0 20px rgb(0 0 0 / 25%);
     width: 250px;
     height: 100vh;
   }
@@ -8,9 +9,11 @@
     font-weight: bold;
     color: white;
     text-align: center;
-    padding-top: 20px;
-    padding-bottom: 20px;
     border-bottom: 1px solid gray;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
   .main-nav .nav-links{
     list-style: none;
@@ -20,11 +23,11 @@
   .main-nav .nav-links a.nav-item{
     text-decoration: none;
     color: white;
-    padding: 5px;
+    padding: 10px;
     border-radius: 10px;
     display: block;
   }
   .main-nav .nav-links a.nav-item:hover{
-    background-color: #0d6efd;
+    background-color: rgba(255, 255, 255, 0.1);
     display: block;
   }
