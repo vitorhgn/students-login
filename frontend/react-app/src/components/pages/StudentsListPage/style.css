@@ -1,12 +1,4 @@
-.content-page .card {
-    margin-top: 20px;
-    padding: 20px;
-    display: flex;
-    justify-content: space-between;
-    box-shadow: rgb(0, 0, 0, 24%) 0 0 7px;
-    border: 1px solid rgba(0,0,0,12.5%);
-    border-radius: 0.25rem;
-  }
+
   .content-page .table-list {
     margin-top: 20px;
     width: 100%;

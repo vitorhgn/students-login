@@ -99,6 +99,8 @@ const StudentManagerPage = ()=>{
         <header className="main-header">
             Cadastro de Aluno
         </header>
+        <div className="content-page padding-left-right-20">
+        <div className='card'>
             <form id="studentForm" className="form" method="post" onSubmit={onSubmitForm}>
                 <div className="form-group">
                     <label htmlFor="name">Nome</label>
@@ -126,9 +128,11 @@ const StudentManagerPage = ()=>{
                 </div>
                 <div className="actions">
                     <Link to='/' className="btn btn-warning margin-right-10">Cancelar</Link>
-                    <button className="btn">Salvar</button>
+                    <button className="btn btn-dark">Salvar</button>
                 </div>
             </form>
+        </div>
+    </div>
 </>
 );
 };
